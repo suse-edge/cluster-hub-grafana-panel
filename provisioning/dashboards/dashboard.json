@@ -23,8 +23,8 @@
   "panels": [
     {
       "datasource": {
-        "type": "grafana",
-        "uid": "grafana"
+        "type": "prometheus",
+        "uid": "mimir"
       },
       "gridPos": {
         "h": 8,
@@ -41,10 +41,14 @@
       "targets": [
         {
           "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
+            "type": "prometheus",
+            "uid": "mimir"
           },
-          "queryType": "randomWalk",
+          "queryType": "builder",
+          "exemplar": false,
+          "expr": "cluster_k8s_version",
+          "instant": true,
+          "range": false,
           "refId": "A"
         }
       ],
