@@ -1,13 +1,13 @@
 {
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
   "type": "panel",
-  "name": "edge-hub-panel",
-  "id": "suse-edge-hub-panel",
+  "name": "SUSE Edge Cluster Hub",
+  "id": "suse-edgehub-panel",
   "info": {
     "keywords": ["panel"],
-    "description": "An edge hub panel for monitoring clusters status",
+    "description": "An Edge Hub panel for monitoring clusters status",
     "author": {
-      "name": "Jiri Tomasek"
+      "name": "SUSE"
     },
     "logos": {
       "small": "img/logo.svg",
