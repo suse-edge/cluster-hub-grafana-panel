@@ -26,6 +26,7 @@
         "type": "prometheus",
         "uid": "mimir"
       },
+      "description": "",
       "gridPos": {
         "h": 8,
         "w": 12,
@@ -44,12 +45,12 @@
             "type": "prometheus",
             "uid": "mimir"
           },
-          "queryType": "builder",
           "exemplar": false,
           "expr": "rancher_cluster_status{DisplayName!=\"local\"}",
           "instant": true,
+          "queryType": "builder",
           "range": false,
-          "refId": "rancher_cluster_status"
+          "refId": "clustersInfo"
         },
         {
           "datasource": {
@@ -58,14 +59,53 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "cluster_not_connected",
+          "expr": "cluster_connected",
           "hide": false,
           "instant": true,
           "range": false,
-          "refId": "cluster_not_connected"
+          "refId": "connected"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "mimir"
+          },
+          "editorMode": "builder",
+          "exemplar": false,
+          "expr": "rancher_cluster_condition_disk_pressure",
+          "hide": false,
+          "instant": true,
+          "range": false,
+          "refId": "diskPressure"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "mimir"
+          },
+          "editorMode": "builder",
+          "exemplar": false,
+          "expr": "rancher_cluster_condition_memory_pressure",
+          "hide": false,
+          "instant": true,
+          "range": false,
+          "refId": "memoryPressure"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "mimir"
+          },
+          "editorMode": "builder",
+          "exemplar": false,
+          "expr": "rancher_cluster_condition_ready",
+          "hide": false,
+          "instant": true,
+          "range": false,
+          "refId": "ready"
         }
       ],
-      "title": "Panel Title",
+      "title": "Managed clusters",
       "type": "suse-edgehub-panel"
     }
   ],
@@ -77,12 +117,13 @@
     "list": []
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Provisioned edge-hub dashboard",
-  "version": 0,
+  "uid": "ab02c3bd-565f-42e5-ba9a-94e0aed456f4",
+  "version": 9,
   "weekStart": ""
 }

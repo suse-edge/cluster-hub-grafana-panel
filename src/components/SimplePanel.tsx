@@ -39,7 +39,7 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
   // const notConnectedFields: any[] = [];
 
   data.series.forEach((serie) => {
-    if (serie.refId === 'rancher_cluster_status') {
+    if (serie.refId === 'clustersInfo') {
       clusterFields.push(serie.fields[1]);
     }
     // if (serie.refId === 'cluster_not_connected') {
