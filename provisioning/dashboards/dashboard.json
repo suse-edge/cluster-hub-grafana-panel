@@ -46,10 +46,23 @@
           },
           "queryType": "builder",
           "exemplar": false,
-          "expr": "cluster_k8s_version",
+          "expr": "rancher_cluster_status{DisplayName!=\"local\"}",
           "instant": true,
           "range": false,
-          "refId": "A"
+          "refId": "rancher_cluster_status"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "mimir"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "cluster_not_connected",
+          "hide": false,
+          "instant": true,
+          "range": false,
+          "refId": "cluster_not_connected"
         }
       ],
       "title": "Panel Title",
