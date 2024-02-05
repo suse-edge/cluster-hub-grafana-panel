@@ -4,6 +4,7 @@ import { SimpleOptions } from 'types';
 import { css, cx } from '@emotion/css';
 import { LoadingPlaceholder, useStyles2 } from '@grafana/ui';
 import ClusterBox from './ClusterBox';
+import { Clusters } from './types';
 
 interface Props extends PanelProps<SimpleOptions> {}
 
@@ -35,19 +36,6 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
 
   // const clusters = data.series.map((serie) => serie.fields.find((field) => field.name === CLUSTERS_METRIC));
 
-  const clusterFields: any[] = [];
-  // const notConnectedFields: any[] = [];
-
-  data.series.forEach((serie) => {
-    if (serie.refId === 'clustersInfo') {
-      clusterFields.push(serie.fields[1]);
-    }
-    // if (serie.refId === 'cluster_not_connected') {
-    //   notConnectedFields.push(serie.fields[1]);
-    // }
-  });
-
-  console.log(clusterFields);
   // const clusterWidth = width / clusters.length
   // const clusterHeight = height / clusters.length
   // const clusterArea = width * height / clusters.length;
@@ -56,30 +44,70 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
   // const clusterHeight = Math.sqrt(clusterArea / panelAspectRatio);
 
   // TODO(jtomasek): useMemo here
-  const highlightedCluster = React.useMemo(
-    () =>
-      highlightedClusterName
-        ? data.series.reduce((clusterDetails, currentSerie) => {
-            const field = currentSerie.fields.find((field) =>
-              [field.labels?.Name, field.labels?.DisplayName].includes(highlightedClusterName)
-            );
-            if (field) {
-              console.log('Field:', field);
-              const n: string = field?.labels?.['__name__'] || '';
-              switch (n) {
-                case 'rancher_cluster_status':
-                  return { ...clusterDetails, ...(field?.labels || {}) };
-                case 'cluster_not_connected':
-                  return { ...clusterDetails, Connected: !field?.values[0] };
-                default:
-                  return clusterDetails;
-              }
-            }
-            return clusterDetails;
-          }, {})
-        : {},
-    [highlightedClusterName, data.series]
-  );
+  // const highlightedCluster = React.useMemo(
+  //   () =>
+  //     highlightedClusterName
+  //       ? data.series.reduce((clusterDetails, currentSerie) => {
+  //           const field = currentSerie.fields.find((field) =>
+  //             [field.labels?.Name, field.labels?.DisplayName].includes(highlightedClusterName)
+  //           );
+  //           if (field) {
+  //             console.log('Field:', field);
+  //             const n: string = field?.labels?.['__name__'] || '';
+  //             switch (n) {
+  //               case 'rancher_cluster_status':
+  //                 return { ...clusterDetails, ...(field?.labels || {}) };
+  //               case 'cluster_not_connected':
+  //                 return { ...clusterDetails, Connected: !field?.values[0] };
+  //               default:
+  //                 return clusterDetails;
+  //             }
+  //           }
+  //           return clusterDetails;
+  //         }, {})
+  //       : {},
+  //   [highlightedClusterName, data.series]
+  // );
+
+  const clusters = data.series.reduce<Clusters>((result, currentSerie) => {
+    const field = currentSerie.fields[1];
+    const clusterName = field.labels?.Name;
+    if (clusterName) {
+      switch (currentSerie.refId) {
+        case 'clustersInfo':
+          return {
+            ...result,
+            [clusterName]: {
+              ...(result[clusterName] || {}),
+              name: field.labels?.Name,
+              displayName: field.labels?.DisplayName,
+              k8sVersion: field.labels?.Version,
+              rancherServerURL: field.labels?.RancherServerURL,
+              mgmtClusterName: field.labels?.['cluster_name'],
+            },
+          };
+        case 'connected':
+          return { ...result, [clusterName]: { ...result[clusterName], connected: field.values[0] } };
+        case 'diskPressure':
+          return { ...result, [clusterName]: { ...result[clusterName], diskPressure: field.values[0] } };
+        case 'memoryPressure':
+          return { ...result, [clusterName]: { ...result[clusterName], memoryPressure: field.values[0] } };
+        case 'ready':
+          return {
+            ...result,
+            [clusterName]: {
+              ...result[clusterName],
+              ready: field.values[0],
+              readyReason: field.labels?.Reason,
+              readyMessage: field.labels?.Message,
+            },
+          };
+        default:
+          return result;
+      }
+    }
+    return result;
+  }, {});
 
   if (data.state === LoadingState.Loading) {
     return <LoadingPlaceholder text="Loading..." />;
@@ -111,13 +139,8 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
       </svg> */}
 
         <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignContent: 'space-around' }}>
-          {clusterFields.map((cluster, i) => (
-            <ClusterBox
-              key={i}
-              cluster={cluster}
-              highlightedCluster={highlightedCluster}
-              onHighlight={setHighlightedClusterName}
-            />
+          {Object.values(clusters).map((cluster, i) => (
+            <ClusterBox key={i} cluster={cluster} onHighlight={setHighlightedClusterName} />
           ))}
         </div>
 

@@ -1,17 +1,43 @@
 import React from 'react';
-import { Field } from '@grafana/data';
 import { css, cx } from '@emotion/css';
 import { LinkButton, Icon, Toggletip, useTheme2 } from '@grafana/ui';
+import { GrafanaTheme2 } from '@grafana/data';
+import { Cluster } from './types';
+
+const getBoxColor = (cluster: Cluster, theme: GrafanaTheme2) => {
+  if (!cluster.connected) {
+    return theme.colors.secondary;
+  }
+  if (cluster.diskPressure || cluster.memoryPressure) {
+    return theme.colors.warning;
+  }
+  if (!cluster.ready) {
+    return theme.colors.error;
+  }
+  return theme.colors.primary;
+};
 
 type ClusterBoxProps = {
-  cluster?: Field;
-  highlightedCluster?: { [key: string]: string };
+  cluster: Cluster;
   onHighlight: (clusterName?: string) => void;
 };
 
-const ClusterBox: React.FC<ClusterBoxProps> = ({ cluster, highlightedCluster, onHighlight }) => {
+const ClusterBox: React.FC<ClusterBoxProps> = ({ cluster, onHighlight }) => {
   const theme = useTheme2();
-  const labels = cluster?.labels || {};
+  const {
+    name,
+    displayName,
+    k8sVersion,
+    rancherServerURL,
+    mgmtClusterName,
+    connected,
+    diskPressure,
+    memoryPressure,
+    ready,
+    readyReason,
+    readyMessage,
+  } = cluster;
+
   const toggleTipContent = (
     <ul
       className={cx(css`
@@ -20,33 +46,45 @@ const ClusterBox: React.FC<ClusterBoxProps> = ({ cluster, highlightedCluster, on
     >
       <li>
         <strong>Name: </strong>
-        {highlightedCluster?.['DisplayName'] || ''}
+        {displayName || ''}
       </li>
       <li>
         <strong>K8s version: </strong>
-        {highlightedCluster?.['Version']}
+        {k8sVersion}
       </li>
       <li>
         <strong>Management cluster name: </strong>
-        {highlightedCluster?.['cluster_name']}
+        {mgmtClusterName}
       </li>
       <li>
         <strong>Connected: </strong>
-        {highlightedCluster?.['Connected'] ? 'yes' : 'no'}
+        {connected ? 'yes' : 'no'}
+      </li>
+      <li>
+        <strong>Disk pressure: </strong>
+        {diskPressure ? 'yes' : 'no'}
+      </li>
+      <li>
+        <strong>Memory pressure: </strong>
+        {memoryPressure ? 'yes' : 'no'}
+      </li>
+      <li>
+        <strong>Status: </strong>
+        {ready ? 'Ready' : `${readyReason}: ${readyMessage}`}
       </li>
     </ul>
   );
 
-  const boxColor = labels.DisplayName?.startsWith('ds3') ? theme.colors.warning : theme.colors.primary;
-
   const toggleTipFooter = (
     <>
-      <LinkButton fill="outline" href={`${labels.RancherServerURL}/dashboard/c/${labels.Name}`} target="_blank">
+      <LinkButton fill="outline" href={`${rancherServerURL}/dashboard/c/${name}`} target="_blank">
         Manage cluster&nbsp;
         <Icon name="external-link-alt" />
       </LinkButton>
     </>
   );
+
+  const boxColor = React.useMemo(() => getBoxColor(cluster, theme), [cluster, theme]);
 
   return (
     <Toggletip
@@ -54,7 +92,7 @@ const ClusterBox: React.FC<ClusterBoxProps> = ({ cluster, highlightedCluster, on
         <h3>
           <Icon name="monitor" />
           &nbsp;
-          {labels.DisplayName}
+          {cluster.displayName}
         </h3>
       }
       content={toggleTipContent}
@@ -77,7 +115,7 @@ const ClusterBox: React.FC<ClusterBoxProps> = ({ cluster, highlightedCluster, on
             transform: scale(1.2);
           }
         `)}
-        onClick={(event) => onHighlight(cluster?.labels?.DisplayName)}
+        onClick={(event) => onHighlight(name)}
       />
     </Toggletip>
   );
