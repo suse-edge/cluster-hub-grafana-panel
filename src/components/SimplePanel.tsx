@@ -30,7 +30,7 @@ const getStyles = () => {
 
 export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
   const styles = useStyles2(getStyles);
-  const [, setHighlightedClusterName] = React.useState<string | undefined>(undefined);
+  const [highlightedClusterName, setHighlightedClusterName] = React.useState<string | undefined>(undefined);
 
   console.log('DATA', data);
 
@@ -87,17 +87,17 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
             },
           };
         case 'connected':
-          return { ...result, [clusterName]: { ...result[clusterName], connected: field.values[0] } };
+          return { ...result, [clusterName]: { ...result[clusterName], connected: field.values.get(0) } };
         case 'diskPressure':
-          return { ...result, [clusterName]: { ...result[clusterName], diskPressure: field.values[0] } };
+          return { ...result, [clusterName]: { ...result[clusterName], diskPressure: field.values.get(0) } };
         case 'memoryPressure':
-          return { ...result, [clusterName]: { ...result[clusterName], memoryPressure: field.values[0] } };
+          return { ...result, [clusterName]: { ...result[clusterName], memoryPressure: field.values.get(0) } };
         case 'ready':
           return {
             ...result,
             [clusterName]: {
               ...result[clusterName],
-              ready: field.values[0],
+              ready: field.values.get(0),
               readyReason: field.labels?.Reason,
               readyMessage: field.labels?.Message,
             },
@@ -140,7 +140,12 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
 
         <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignContent: 'space-around' }}>
           {Object.values(clusters).map((cluster, i) => (
-            <ClusterBox key={i} cluster={cluster} onHighlight={setHighlightedClusterName} />
+            <ClusterBox
+              key={i}
+              cluster={cluster}
+              onHighlight={setHighlightedClusterName}
+              highlightedClusterName={highlightedClusterName}
+            />
           ))}
         </div>
 

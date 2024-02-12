@@ -1,8 +1,9 @@
 import React from 'react';
 import { css, cx } from '@emotion/css';
-import { LinkButton, Icon, Toggletip, useTheme2 } from '@grafana/ui';
+import { LinkButton, Icon, useTheme2, Modal, Tooltip } from '@grafana/ui';
 import { GrafanaTheme2 } from '@grafana/data';
 import { Cluster } from './types';
+// import { Toggletip } from './Toggletip';
 
 const getBoxColor = (cluster: Cluster, theme: GrafanaTheme2) => {
   if (!cluster.connected) {
@@ -20,9 +21,10 @@ const getBoxColor = (cluster: Cluster, theme: GrafanaTheme2) => {
 type ClusterBoxProps = {
   cluster: Cluster;
   onHighlight: (clusterName?: string) => void;
+  highlightedClusterName?: string;
 };
 
-const ClusterBox: React.FC<ClusterBoxProps> = ({ cluster, onHighlight }) => {
+const ClusterBox: React.FC<ClusterBoxProps> = ({ cluster, onHighlight, highlightedClusterName }) => {
   const theme = useTheme2();
   const {
     name,
@@ -89,6 +91,7 @@ const ClusterBox: React.FC<ClusterBoxProps> = ({ cluster, onHighlight }) => {
         href={`${rancherServerURL}/dashboard/c/${name}`}
         target="_blank"
         rel="noopener nofollow"
+        onClick={() => onHighlight()}
       >
         Manage cluster&nbsp;
         <Icon name="external-link-alt" />
@@ -99,37 +102,51 @@ const ClusterBox: React.FC<ClusterBoxProps> = ({ cluster, onHighlight }) => {
   const boxColor = React.useMemo(() => getBoxColor(cluster, theme), [cluster, theme]);
 
   return (
-    <Toggletip
-      title={
-        <h3>
-          <Icon name="monitor" />
-          &nbsp;
-          {cluster.displayName}
-        </h3>
-      }
-      content={toggleTipContent}
-      footer={toggleTipFooter}
-      closeButton={true}
-      placement="auto"
-      onClose={() => onHighlight(undefined)}
-    >
-      <div
-        className={cx(css`
-          width: 2rem;
-          height: 2rem;
-          margin: 3px;
-          border-radius: 5px;
-          cursor: pointer;
-          background: ${boxColor.main};
-          transition: all 0.1s linear;
-          &:hover {
-            background-color: ${boxColor.shade};
-            transform: scale(1.2);
-          }
-        `)}
-        onClick={(event) => onHighlight(name)}
-      />
-    </Toggletip>
+    // <Toggletip
+    //   title={
+    //     <h3>
+    //       <Icon name="monitor" />
+    //       &nbsp;
+    //       {cluster.displayName}
+    //     </h3>
+    //   }
+    //   content={toggleTipContent}
+    //   footer={toggleTipFooter}
+    //   closeButton={true}
+    //   placement="auto"
+    //   onClose={() => onHighlight(undefined)}
+    // >
+    <>
+      <Tooltip content={cluster.displayName || ''}>
+        <div
+          className={cx(css`
+            width: 2rem;
+            height: 2rem;
+            margin: 3px;
+            border-radius: 5px;
+            cursor: pointer;
+            background: ${boxColor.main};
+            transition: all 0.1s linear;
+            &:hover {
+              background-color: ${boxColor.shade};
+              transform: scale(1.2);
+            }
+          `)}
+          onClick={(event) => onHighlight(name)}
+        />
+      </Tooltip>
+      <Modal
+        title={cluster.displayName || ''}
+        isOpen={cluster.name === highlightedClusterName}
+        closeOnBackdropClick
+        closeOnEscape
+        onDismiss={onHighlight}
+      >
+        {toggleTipContent}
+        <Modal.ButtonRow>{toggleTipFooter}</Modal.ButtonRow>
+      </Modal>
+    </>
+    // </Toggletip>
   );
 };
 
