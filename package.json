@@ -1,7 +1,7 @@
 {
-  "name": "edge-hub",
-  "version": "1.0.0",
-  "description": "An edge hub panel for monitoring clusters status",
+  "name": "cluster-hub",
+  "version": "0.0.1",
+  "description": "A cluster hub panel for monitoring clusters status",
   "scripts": {
     "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
     "dev": "webpack -w -c ./.config/webpack/webpack.config.ts --env development",

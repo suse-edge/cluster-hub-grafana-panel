@@ -869,7 +869,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Provisioned edge-hub dashboard",
+  "title": "Provisioned cluster-hub dashboard",
   "uid": "ab02c3bd-565f-42e5-ba9a-94e0aed456f4",
   "version": 14,
   "weekStart": ""
