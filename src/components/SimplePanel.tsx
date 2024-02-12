@@ -30,7 +30,7 @@ const getStyles = () => {
 
 export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) => {
   const styles = useStyles2(getStyles);
-  const [highlightedClusterName, setHighlightedClusterName] = React.useState<string | undefined>(undefined);
+  const [, setHighlightedClusterName] = React.useState<string | undefined>(undefined);
 
   console.log('DATA', data);
 
