@@ -70,14 +70,26 @@ const ClusterBox: React.FC<ClusterBoxProps> = ({ cluster, onHighlight }) => {
       </li>
       <li>
         <strong>Status: </strong>
-        {ready ? 'Ready' : `${readyReason}: ${readyMessage}`}
+        {ready ? 'Ready' : 'Not ready'}
       </li>
+      {readyReason && readyMessage && (
+        <li>
+          <strong>Status info: </strong>
+          {`${readyReason}: ${readyMessage}`}
+        </li>
+      )}
     </ul>
   );
 
   const toggleTipFooter = (
     <>
-      <LinkButton fill="outline" href={`${rancherServerURL}/dashboard/c/${name}`} target="_blank">
+      <LinkButton
+        fill="outline"
+        style={{ textDecoration: 'none', color: theme.colors.primary.main }}
+        href={`${rancherServerURL}/dashboard/c/${name}`}
+        target="_blank"
+        rel="noopener nofollow"
+      >
         Manage cluster&nbsp;
         <Icon name="external-link-alt" />
       </LinkButton>

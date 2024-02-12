@@ -144,11 +144,11 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
           ))}
         </div>
 
-        <div className={styles.textBox}>
+        {/* <div className={styles.textBox}>
           Highlighted cluster: {highlightedClusterName}
           {options.showSeriesCount && <div>Number of series: {data.series.length}</div>}
           <div>Text option value: {options.text}</div>
-        </div>
+        </div> */}
       </div>
     );
   }
