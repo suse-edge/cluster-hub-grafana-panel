@@ -732,7 +732,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "label_replace(label_replace(count by(cluster_name, RancherServerURL) (rancher_cluster_status{cluster_name=\"spoke1\"}), \"lat\", \"49.4521\", \"\", \"\"), \"lon\", \"11.0767\", \"\", \"\")",
+          "expr": "count by(cluster_name, RancherServerURL, latitude, longitude) (rancher_cluster_status{cluster_name=~\"spoke.*\"})",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -741,7 +741,7 @@
           "refId": "A"
         }
       ],
-      "title": "Spoke clusters",
+      "title": "Spoke clusters map",
       "transformations": [
         {
           "id": "organize",
@@ -881,6 +881,6 @@
   "timezone": "",
   "title": "Cluster Hub Dashboard",
   "uid": "cluster-hub-dashboard",
-  "version": 5,
+  "version": 6,
   "weekStart": ""
 }
