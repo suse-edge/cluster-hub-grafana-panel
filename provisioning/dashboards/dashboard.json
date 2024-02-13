@@ -11,6 +11,12 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
@@ -18,6 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 38,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -50,7 +57,7 @@
       },
       "gridPos": {
         "h": 5,
-        "w": 3,
+        "w": 5,
         "x": 0,
         "y": 0
       },
@@ -67,7 +74,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "10.0.3",
+      "pluginVersion": "9.1.5",
       "targets": [
         {
           "datasource": {
@@ -109,7 +116,10 @@
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "linear",
+            "lineInterpolation": "stepBefore",
+            "lineStyle": {
+              "fill": "solid"
+            },
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -125,6 +135,7 @@
               "mode": "off"
             }
           },
+          "decimals": 0,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -138,7 +149,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "none"
         },
         "overrides": [
           {
@@ -242,8 +254,8 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 21,
-        "x": 3,
+        "w": 19,
+        "x": 5,
         "y": 0
       },
       "id": 3,
@@ -395,7 +407,7 @@
       },
       "gridPos": {
         "h": 5,
-        "w": 3,
+        "w": 5,
         "x": 0,
         "y": 5
       },
@@ -460,8 +472,8 @@
       "description": "",
       "gridPos": {
         "h": 8,
-        "w": 21,
-        "x": 3,
+        "w": 19,
+        "x": 5,
         "y": 7
       },
       "id": 1,
@@ -562,7 +574,7 @@
       },
       "gridPos": {
         "h": 5,
-        "w": 3,
+        "w": 5,
         "x": 0,
         "y": 10
       },
@@ -639,7 +651,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 15,
+        "h": 10,
         "w": 12,
         "x": 0,
         "y": 15
@@ -711,7 +723,7 @@
           "zoom": 5.93
         }
       },
-      "pluginVersion": "10.0.3",
+      "pluginVersion": "9.1.5",
       "targets": [
         {
           "datasource": {
@@ -765,9 +777,7 @@
           },
           "custom": {
             "align": "auto",
-            "cellOptions": {
-              "type": "auto"
-            },
+            "displayMode": "auto",
             "filterable": false,
             "inspect": false
           },
@@ -789,7 +799,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 15,
+        "h": 10,
         "w": 12,
         "x": 12,
         "y": 15
@@ -813,7 +823,7 @@
           }
         ]
       },
-      "pluginVersion": "10.0.3",
+      "pluginVersion": "9.1.5",
       "targets": [
         {
           "datasource": {
@@ -856,8 +866,8 @@
       "type": "table"
     }
   ],
-  "refresh": "1m",
-  "schemaVersion": 38,
+  "refresh": "5s",
+  "schemaVersion": 37,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -869,8 +879,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Provisioned cluster-hub dashboard",
-  "uid": "ab02c3bd-565f-42e5-ba9a-94e0aed456f4",
-  "version": 14,
+  "title": "Cluster Hub Dashboard",
+  "uid": "cluster-hub-dashboard",
+  "version": 5,
   "weekStart": ""
 }
