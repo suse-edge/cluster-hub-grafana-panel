@@ -1,8 +1,8 @@
 import React from 'react';
-import { LoadingState, PanelProps } from '@grafana/data';
+import { PanelProps } from '@grafana/data';
 import { SimpleOptions } from 'types';
 import { css, cx } from '@emotion/css';
-import { LoadingPlaceholder, useStyles2 } from '@grafana/ui';
+import { useStyles2 } from '@grafana/ui';
 import ClusterBox from './ClusterBox';
 import { Clusters } from './types';
 
@@ -109,20 +109,20 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
     return result;
   }, {});
 
-  if (data.state === LoadingState.Loading) {
-    return <LoadingPlaceholder text="Loading..." />;
-  } else {
-    return (
-      <div
-        className={cx(
-          styles.wrapper,
-          css`
-            width: ${width}px;
-            height: ${height}px;
-          `
-        )}
-      >
-        {/* <svg
+  // if (data.state === LoadingState.Loading) {
+  //   return <LoadingPlaceholder text="Loading..." />;
+  // } else {
+  return (
+    <div
+      className={cx(
+        styles.wrapper,
+        css`
+          width: ${width}px;
+          height: ${height}px;
+        `
+      )}
+    >
+      {/* <svg
         className={styles.svg}
         width={width}
         height={height}
@@ -138,23 +138,23 @@ export const SimplePanel: React.FC<Props> = ({ options, data, width, height }) =
         ))}
       </svg> */}
 
-        <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignContent: 'space-around' }}>
-          {Object.values(clusters).map((cluster, i) => (
-            <ClusterBox
-              key={i}
-              cluster={cluster}
-              onHighlight={setHighlightedClusterName}
-              highlightedClusterName={highlightedClusterName}
-            />
-          ))}
-        </div>
+      <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignContent: 'space-around' }}>
+        {Object.values(clusters).map((cluster, i) => (
+          <ClusterBox
+            key={i}
+            cluster={cluster}
+            onHighlight={setHighlightedClusterName}
+            highlightedClusterName={highlightedClusterName}
+          />
+        ))}
+      </div>
 
-        {/* <div className={styles.textBox}>
+      {/* <div className={styles.textBox}>
           Highlighted cluster: {highlightedClusterName}
           {options.showSeriesCount && <div>Number of series: {data.series.length}</div>}
           <div>Text option value: {options.text}</div>
         </div> */}
-      </div>
-    );
-  }
+    </div>
+  );
+  // }
 };
